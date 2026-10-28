@@ -11,9 +11,9 @@ step_count = 0
 
 #target
 target_heading = 0
-target_pos = np.array([0.0,1000.0])
+target_pos = np.array([1000.0,100.0])
 target_hist = []
-target_v = np.array([200.0,10.0])
+target_v = np.array([200.0,0.0])
 target_a = np.array([0.0,0.0])
 
 
@@ -21,7 +21,7 @@ target_a = np.array([0.0,0.0])
 seeker_heading = 0
 seeker_pos = np.array([0.0,0.0])
 seeker_hist = []
-seeker_v = np.array([0.0,200.0])
+seeker_v = np.array([50.0,0.0])
 seeker_a = np.array([0.0,0.0])
 seeker_forward_accel = 10
 
@@ -124,7 +124,7 @@ while True :
         target_hist.append(target_pos.copy())
 
 ##outcomes
-    if closing_velocity() <= 0 and prev_vc >0 :
+    if closing_velocity() <= 0 and prev_vc >0 and distance_to_target()<1 :
         miss_distance = distance_to_target()
         print(f"Target Intercepted In {t:.3} Seconds")
         print(f"Closest approach ={distance_to_target():.3}")
