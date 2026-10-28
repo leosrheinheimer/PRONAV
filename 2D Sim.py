@@ -26,7 +26,7 @@ seeker_a = np.array([0.0,0.0])
 seeker_forward_accel = 10
 
 #tracking
-g_limit = 5
+g_limit = 10
 max_accel = g_limit * 9.81
 los_angle = 0
 N = 5
@@ -38,6 +38,12 @@ def distance_to_target() :
 
 def relative_velocity() : 
     return math.sqrt(((target_v[0] - seeker_v[0])**2 + (target_v[1] - seeker_v[1])**2 ))
+
+def closing_velocity() :
+    r = error()
+    v_relative = target_v - seeker_v 
+    distance = np.linalg.norm(r)
+    return -np.dot(r,v_relative) / distance 
 
 def normalize_angle(angle) : 
     if angle < -180.0 : 
@@ -85,7 +91,7 @@ while True :
     else :
         seeker_forward_accel = 10
     
-    commanded_accel = N * relative_velocity() * math.radians(los_rate)
+    commanded_accel = N * closing_velocity() * math.radians(los_rate)
     clamped_accel = max(-max_accel, min(commanded_accel,max_accel))
     steer_x = -clamped_accel * math.sin(los_angle_rad)
     steer_y = clamped_accel * math.cos(los_angle_rad)
@@ -104,7 +110,7 @@ while True :
         print(f"Distance To Target ={float(distance_to_target()):.3f}")
         print(f"target position = ({target_pos[0]:.1f},{target_pos[1]:.1f})")
         print(f"seeker position = ({seeker_pos[0]:.1f},{seeker_pos[1]:.1f})")
-        print(f"V relative={relative_velocity():.4}")
+        print(f"closing V={closing_velocity():.4}")
         print(f"Distance to Target ={math.sqrt(error()[0]**2 + error()[1]**2):.4}")
 
 
