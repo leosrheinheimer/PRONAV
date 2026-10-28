@@ -29,7 +29,7 @@ seeker_forward_accel = 10
 g_limit = 10
 max_accel = g_limit * 9.81
 los_angle = 0
-N = 5
+N = 4
 
 ## FUNCTIONS
 
