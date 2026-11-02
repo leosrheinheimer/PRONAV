@@ -1,6 +1,5 @@
 import numpy as np
 import math
-import matplotlib.pyplot as plt 
 
 
 def run_log(hz,state_data):
@@ -10,6 +9,13 @@ def run_log(hz,state_data):
         print(f"distance to target: {closing_dist(state_data['pursuer_pos'],state_data['target_pos']):.2f} meters")
         print()
 
+def calculate_los_rate(pos_pursuer, v_pursuer, pos_target, v_target):
+    distance = np.subtract(pos_target, pos_pursuer)
+    v_relative = np.subtract(v_target, v_pursuer)
+    distance_squared = r_squared = np.dot(distance, distace) 
+    cross_val = np.cross(distance, v_relative)
+    los_rate = distance_squared/cross_val
+    return los_rate
 
 def normalize_angle(angle) : 
     if angle < -180.0 : 

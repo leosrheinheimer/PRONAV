@@ -34,6 +34,9 @@ while True :
 
     utility.run_log(50,state_data)
 
+    #control
+    los_rate_current = utility.calculate_los_rate(pursuer.pos, pursuer.v, target.pos, target.v)
+    
 
     #simming
     if utility.closing_dist(pursuer.pos,target.pos) < 1 :
