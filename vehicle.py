@@ -6,8 +6,13 @@ class Vehicle :
         self.v = np.array(v, dtype=float)
         self.a = np.array([0.0,0.0], dtype = float)
         self.hdg = 0.0
+        self.pos_hist = []
 
     def tick (self, dt) :
+        #logging
+        self.pos_hist.append(self.pos.copy())
+        self.pos_prev = self.pos.copy()
+        #ticking
         self.pos += self.v * dt
         self.v += self.a * dt
         self.hdg = np.arctan2(self.v[1],self.v[0])
