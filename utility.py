@@ -2,6 +2,13 @@ import numpy as np
 import math
 import matplotlib as plt 
 
+
+def run_log(hz,state_data):
+    steps_per_log = int(round(1 / (hz * state_data['dt'])))
+    if state_data['step_count'] % steps_per_log== 0 :
+        print(f"distance to target: {closing_dist(state_data['pursuer_pos'],state_data['target_pos']):.2f} meters")
+
+
 def normalize_angle(angle) : 
     if angle < -180.0 : 
         normalized_angle = angle + 360.0
