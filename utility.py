@@ -1,6 +1,6 @@
 import numpy as np
 import math
-import matplotlib as plt 
+import matplotlib.pyplot as plt 
 
 
 def run_log(hz,state_data):
