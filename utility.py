@@ -6,7 +6,9 @@ import matplotlib as plt
 def run_log(hz,state_data):
     steps_per_log = int(round(1 / (hz * state_data['dt'])))
     if state_data['step_count'] % steps_per_log== 0 :
+        print(f"time: t+ {state_data['timestamp']:.2f} seconds")
         print(f"distance to target: {closing_dist(state_data['pursuer_pos'],state_data['target_pos']):.2f} meters")
+        print()
 
 
 def normalize_angle(angle) : 
