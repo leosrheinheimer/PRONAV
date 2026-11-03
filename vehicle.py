@@ -7,10 +7,12 @@ class Vehicle :
         self.a = np.array([0.0,0.0], dtype = float)
         self.hdg = 0.0
         self.pos_hist = []
+        self.v_hist = []
 
     def tick (self, dt) :
         #logging
         self.pos_hist.append(self.pos.copy())
+        self.v_hist.append(self.v.copy())
         self.pos_prev = self.pos.copy()
         #ticking
         self.pos += self.v * dt

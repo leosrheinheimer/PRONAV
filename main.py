@@ -1,19 +1,18 @@
 import numpy as np
-import math 
-import matplotlib.pyplot as plt
 import utility
 from vehicle import Vehicle
+import plotter
 
 
 
 #sim conditions
 dt = 0.001
-cutoff_time = 20
+cutoff_time = 30
 step_count = 0
 
 #vehicles
-target = Vehicle([100.0,0.0],[0.0,0.0])
-pursuer = Vehicle([0.0,0.0],[20.0,0.0])
+target = Vehicle([1000.0,5000.0],[300.0,100.0])
+pursuer = Vehicle([0.0,0.0],[0.0,200.0])
 
 #constants
 nav_constant = 3.0
@@ -69,3 +68,6 @@ while True :
     target.tick(dt)
     pursuer.tick(dt)
     step_count += 1
+
+#calling plotter
+plotter.plot_trajectories(target, pursuer)
