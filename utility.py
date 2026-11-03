@@ -102,6 +102,6 @@ def error_vector(pursuer, target) :
     return np.subtract(target.pos,pursuer.pos)
 
 def pol2cart(r,theta):
-    x = r*np.cos(theta)
-    y = r*np.sin(theta)
+    x = r*np.cos(math.radians(theta))
+    y = r*np.sin(math.radians(theta))
     return [x,y]

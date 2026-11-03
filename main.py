@@ -15,8 +15,8 @@ step_count = 0
 target_v_hdg_polar_deg = [300, 45]
 pursuer_v_hdg_polar_deg = [200 , 90]
 
-target = Vehicle([1000.0,5000.0],[utility.pol2cart(target_v_hdg_polar_deg[0],target_v_hdg_polar_deg[1])])
-pursuer = Vehicle([0.0,0.0],[utility.pol2cart(pursuer_v_hdg_polar_deg[0],pursuer_v_hdg_polar_deg[1])])
+target = Vehicle([1000.0, 5000.0], utility.pol2cart(target_v_hdg_polar_deg[0], target_v_hdg_polar_deg[1]))
+pursuer = Vehicle([0.0, 0.0], utility.pol2cart(pursuer_v_hdg_polar_deg[0], pursuer_v_hdg_polar_deg[1]))
 
 #constants
 nav_constant = 3.0
