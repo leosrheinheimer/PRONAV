@@ -1,5 +1,6 @@
 import numpy as np
 import utility
+import math
 from vehicle import Vehicle
 import plotter
 
@@ -11,8 +12,11 @@ cutoff_time = 30
 step_count = 0
 
 #vehicles
-target = Vehicle([1000.0,5000.0],[300.0,100.0])
-pursuer = Vehicle([0.0,0.0],[0.0,200.0])
+target_v_hdg_polar_deg = [300, 45]
+pursuer_v_hdg_polar_deg = [200 , 90]
+
+target = Vehicle([1000.0,5000.0],[utility.pol2cart(target_v_hdg_polar_deg[0],target_v_hdg_polar_deg[1])])
+pursuer = Vehicle([0.0,0.0],[utility.pol2cart(pursuer_v_hdg_polar_deg[0],pursuer_v_hdg_polar_deg[1])])
 
 #constants
 nav_constant = 3.0
@@ -20,9 +24,11 @@ nav_constant = 3.0
 #logging
 
 while True :
+
+
     #logging 
     state_data = {
-        'timestamp' : step_count * dt,
+        'timestamp' : pursuer.time,
         'target_pos' : target.pos,
         'v_target' : target.v,
         'pursuer_pos' : pursuer.pos,

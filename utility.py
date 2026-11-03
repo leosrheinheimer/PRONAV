@@ -100,3 +100,8 @@ def closing_dist (loc1 , loc2):
 
 def error_vector(pursuer, target) :
     return np.subtract(target.pos,pursuer.pos)
+
+def pol2cart(r,theta):
+    x = r*np.cos(theta)
+    y = r*np.sin(theta)
+    return [x,y]

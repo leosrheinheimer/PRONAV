@@ -6,15 +6,24 @@ class Vehicle :
         self.v = np.array(v, dtype=float)
         self.a = np.array([0.0,0.0], dtype = float)
         self.hdg = 0.0
-        self.pos_hist = []
-        self.v_hist = []
+        self.history = []
+        self.time = 0.0
 
     def tick (self, dt) :
         #logging
-        self.pos_hist.append(self.pos.copy())
-        self.v_hist.append(self.v.copy())
-        self.pos_prev = self.pos.copy()
+        self.history.append({
+            'timestamp': self.time,
+            'pos': self.pos.copy(),
+            'v': self.v.copy(),
+            'a': self.a.copy(),
+            'hdg': self.hdg
+        })
         #ticking
         self.pos += self.v * dt
         self.v += self.a * dt
         self.hdg = np.arctan2(self.v[1],self.v[0])
+
+        #update internal clock
+        self.time += dt
+
+    
