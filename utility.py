@@ -44,21 +44,31 @@ def calculate_dynamic_acceleration(state):
     u_theta = np.array([-u_r[1], u_r[0]]) # Transverse direction for PN steering
     u_v = v_pursuer / v_mag if v_mag > 0 else np.array([1.0, 0.0]) # Heading direction
     
+  
     # 1. Proportional Navigation Lateral Acceleration Magnitude
     nc = state['nav_constant']
     closing_v = state['closing_velocity']
     los_rate = state['los_rate']
     
-    a_lateral_mag = nc * closing_v * los_rate
+    # --- SAFEGUARD: Check Closing Velocity & Seeker FOV ---
+    cos_off_boresight = np.clip(np.dot(u_v, u_r), -1.0, 1.0)
+    off_boresight_deg = np.degrees(np.arccos(cos_off_boresight))
     
-    # --- G-LIMITER (35g max for Sidewinder) ---
-    g_0 = 9.81 # m/s^2
-    max_lateral_accel = state['max_g'] * g_0
-    
-    if abs(a_lateral_mag) > max_lateral_accel:
-        a_lateral_mag = np.sign(a_lateral_mag) * max_lateral_accel
+    # Disable active PN steering if moving away (V_c <= 0) or target exceeds seeker FOV (60 deg)
+    if closing_v <= 0 or off_boresight_deg > 60.0:
+        a_lateral_mag = 0.0
+    else:
+        a_lateral_mag = nc * closing_v * los_rate
         
-    a_lateral = a_lateral_mag * u_theta
+        # --- G-LIMITER ---
+        g_0 = 9.81 # m/s^2
+        max_lateral_accel = state['max_g'] * g_0
+        if abs(a_lateral_mag) > max_lateral_accel:
+            a_lateral_mag = np.sign(a_lateral_mag) * max_lateral_accel
+        
+    # Steering perpendicular to current velocity vector (Zero-Work turning)
+    u_v_perp = np.array([-u_v[1], u_v[0]]) 
+    a_lateral = a_lateral_mag * u_v_perp
     
     # 2. Longitudinal Forces (Thrust & Drag)
     # Check if motor is still active based on burn time
