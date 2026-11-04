@@ -12,14 +12,14 @@ cutoff_time = 30
 step_count = 0
 
 #vehicles
-target_v_hdg_polar_deg = [300, 45]
-pursuer_v_hdg_polar_deg = [200, 45]
+target_v_hdg_polar_deg = [200, -10]
+pursuer_v_hdg_polar_deg = [200, 90]
 
-target = Vehicle([2000.0, 2000.0], utility.pol2cart(target_v_hdg_polar_deg[0], target_v_hdg_polar_deg[1]))
+target = Vehicle([-2000.0, 8000.0], utility.pol2cart(target_v_hdg_polar_deg[0], target_v_hdg_polar_deg[1]))
 pursuer = Vehicle([0.0, 0.0], utility.pol2cart(pursuer_v_hdg_polar_deg[0], pursuer_v_hdg_polar_deg[1]))
 
 #constants
-nav_constant = 20.0
+nav_constant = 5.0
 blast_radius = 10.0
 
 #logging
@@ -65,17 +65,17 @@ while True :
     max_target_g = 10.0  
     max_target_accel = max_target_g * 9.81
     
-    # Desired raw evasive acceleration components
+    # Desired raw evasive acceleration direction
     raw_ax = 80.0 * np.sin(0.8 * pursuer.time)
     raw_ay = 60.0 * np.cos(0.6 * pursuer.time)
     target_a_desired = np.array([raw_ax, raw_ay])
     
-    # Clamp the total acceleration vector magnitude to the G-limit
+    # Unit-normalize the desired direction and scale to full 10G magnitude
     target_accel_mag = np.linalg.norm(target_a_desired)
-    if target_accel_mag > max_target_accel:
+    if target_accel_mag > 0:
         target.a = (target_a_desired / target_accel_mag) * max_target_accel
     else:
-        target.a = target_a_desired
+        target.a = np.array([0.0, 0.0])
 
     #ticking
     target.tick(dt)

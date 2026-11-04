@@ -68,12 +68,17 @@ def calculate_dynamic_acceleration(state):
     u_v_perp = np.array([-u_v[1], u_v[0]]) 
     a_lateral = a_lateral_mag * u_v_perp
     
-    # 2. Longitudinal Forces (Thrust & Drag)
+# 2. Longitudinal Forces (Thrust & Drag)
     # Check if motor is still active based on burn time
     if state['timestamp'] <= state['burn_time']:
         thrust = state['nominal_thrust']
+        # Dynamic mass: linear burn profile from 85.5 kg down to ~45.5 kg at burnout
+        initial_mass = state['mass']
+        propellant_mass = 40.0 # kg consumed during burn
+        mass = initial_mass - (propellant_mass * (state['timestamp'] / state['burn_time']))
     else:
         thrust = 0.0 # Motor burnout / coast phase
+        mass = state['mass'] - 40.0 # Constant empty mass during coasting
         
     mass = state['mass']
     rho = state['air_density']
