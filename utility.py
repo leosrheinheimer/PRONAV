@@ -50,14 +50,10 @@ def calculate_dynamic_acceleration(state):
     closing_v = state['closing_velocity']
     los_rate = state['los_rate']
     
-    # --- SAFEGUARD: Check Closing Velocity & Seeker FOV ---
-    cos_off_boresight = np.clip(np.dot(u_v, u_r), -1.0, 1.0)
-    off_boresight_deg = np.degrees(np.arccos(cos_off_boresight))
-    
-    # Disable active PN steering if moving away (V_c <= 0) or target exceeds seeker FOV (60 deg)
-    if closing_v <= 0 or off_boresight_deg > 60.0:
-        a_lateral_mag = 0.0
-    else:
+# --- DYNAMIC V_c GATE WITH TERMINAL HOMING OVERRIDE ---
+    # Steer if closing in (V_c > 0), OR if we are in the terminal phase (< 100m) 
+    # to prevent cutting steering right before an intercept.
+    if closing_v > 0 or abs_distance < 100.0:
         a_lateral_mag = nc * closing_v * los_rate
         
         # --- G-LIMITER ---
@@ -65,6 +61,8 @@ def calculate_dynamic_acceleration(state):
         max_lateral_accel = state['max_g'] * g_0
         if abs(a_lateral_mag) > max_lateral_accel:
             a_lateral_mag = np.sign(a_lateral_mag) * max_lateral_accel
+    else:
+        a_lateral_mag = 0.0
         
     # Steering perpendicular to current velocity vector (Zero-Work turning)
     u_v_perp = np.array([-u_v[1], u_v[0]]) 

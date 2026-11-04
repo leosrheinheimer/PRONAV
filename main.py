@@ -20,6 +20,7 @@ pursuer = Vehicle([0.0, 0.0], utility.pol2cart(pursuer_v_hdg_polar_deg[0], pursu
 
 #constants
 nav_constant = 20.0
+blast_radius = 10.0
 
 #logging
 
@@ -76,18 +77,20 @@ while True :
     else:
         target.a = target_a_desired
 
+    #ticking
+    target.tick(dt)
+    pursuer.tick(dt)
+    step_count += 1
+
     #simming
-    if utility.closing_dist(pursuer.pos,target.pos) < 1 :
+    if utility.closing_dist(pursuer.pos,target.pos) < blast_radius :
         print("TARGET INTERCEPTED")
         break 
     elif state_data['timestamp'] >= cutoff_time :
         print("TARGET NOT INTERCEPTED IN TIME")
         break
 
-    #ticking
-    target.tick(dt)
-    pursuer.tick(dt)
-    step_count += 1
+
 
 #calling plotter
 plotter.plot_trajectories(target, pursuer)
